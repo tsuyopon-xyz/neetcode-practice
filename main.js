@@ -1,3 +1,6 @@
+// This file is for solving problem in LeetCode.
+// After submittion a problem, this file is updated to solve new problem.
+
 /**
  * @param {number[]} nums
  * @return {number}
