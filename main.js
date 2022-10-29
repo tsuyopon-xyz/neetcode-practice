@@ -1,50 +1,63 @@
-// This file is for solving problem in LeetCode.
-// After submittion a problem, this file is updated to solve new problem.
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+
+function ListNode(val, next) {
+  this.val = val === undefined ? 0 : val;
+  this.next = next === undefined ? null : next;
+}
 
 /**
- * @param {number[]} nums
- * @return {number}
+ * @param {ListNode} list1
+ * @param {ListNode} list2
+ * @return {ListNode}
  */
-var longestConsecutive = function (nums) {
-  if (nums.length === 0) return 0;
+var mergeTwoLists = function (list1, list2) {
+  if (!list1 && !list2) return undefined;
+  if (!list1) return list2;
+  if (!list2) return list1;
 
-  const set = new Set();
-  for (const num of nums) {
-    set.add(num);
+  // 1. list1, list2の値を比較
+  // 2. 比較して小さい方を選択する
+  const selectedList = list1.val < list2.val ? list1 : list2;
+  // 3. 選択した方はnextに移動する
+  if (selectedList === list1) {
+    selectedList.next = mergeTwoLists(list1.next, list2);
+  } else {
+    selectedList.next = mergeTwoLists(list1, list2.next);
   }
+  // 4. 1~3をそれぞれのnextがなくなるまで繰り返す
 
-  /**
-   * @type {number[][]}
-   */
-  const lcsList = [];
-  const checkedStartNumber = new Set();
-  let max = 0;
-  for (let i = 0; i < nums.length; i++) {
-    const num = nums[i];
-
-    // 1つ前の数字がある場合は、開始位置ではないためスキップする
-    if (set.has(num - 1)) continue;
-
-    // 確認済みの開始番号の場合は処理をスキップする
-    if (checkedStartNumber.has(num)) continue;
-    checkedStartNumber.add(num);
-
-    let candidate = num;
-    const currentIndexOfLcsList = lcsList.length;
-    while (set.has(candidate)) {
-      if (!lcsList[currentIndexOfLcsList]) {
-        lcsList.push([]);
-      }
-
-      lcsList[currentIndexOfLcsList].push(candidate);
-      candidate++;
-    }
-
-    max = Math.max(max, lcsList[currentIndexOfLcsList].length);
-  }
-
-  return max;
+  return selectedList;
 };
 
-const result = longestConsecutive([9, 1, 4, 7, 3, -1, 0, 5, 8, -1, 6]);
-console.log(result);
+/**
+ *
+ * @param {number[]} numbers
+ * @return {ListNode}
+ */
+function createList(numbers) {
+  const lists = numbers.map((n) => {
+    return new ListNode(n);
+  });
+
+  for (let i = 0; i < lists.length - 1; i++) {
+    const current = lists[i];
+    const next = lists[i + 1];
+    current.next = next;
+  }
+
+  return lists[0];
+}
+
+const result = mergeTwoLists(createList([1, 2, 4]), createList([1, 3, 4]));
+let _list = result;
+while (_list) {
+  console.log(_list);
+  _list = _list.next;
+}
+// console.log(result);
