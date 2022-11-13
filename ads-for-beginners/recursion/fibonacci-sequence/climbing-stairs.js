@@ -5,16 +5,29 @@
  * @return {number}
  */
 var climbStairs = function (n) {
-  // console.time('Not-DP');
-  // const result = fibonacci(n);
-  // console.timeEnd('Not-DP');
+  // Solution: https://www.youtube.com/watch?v=Y0lT9Fck7qI
+  let [one, two] = [1, 1];
 
-  console.time('With-DP');
-  const result = fibonacciInDP(n);
-  console.timeEnd('With-DP');
+  for (let i = 0; i < n - 1; i++) {
+    const temp = one;
+    one = one + two;
+    two = temp;
+  }
 
-  return result;
+  return one;
 };
+
+// var climbStairs = function (n) {
+//   // console.time('Not-DP');
+//   // const result = fibonacci(n);
+//   // console.timeEnd('Not-DP');
+
+//   console.time('With-DP');
+//   const result = fibonacciInDP(n);
+//   console.timeEnd('With-DP');
+
+//   return result;
+// };
 
 function fibonacci(n) {
   if (n === 0) return 1;
@@ -52,5 +65,7 @@ function fibonacciInDP(n, map = new Map()) {
   return result1 + result2;
 }
 
+console.time('time');
 const result = climbStairs(45);
+console.timeEnd('time');
 console.log(result);
